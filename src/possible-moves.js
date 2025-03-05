@@ -1,17 +1,17 @@
-import { Position } from "./knight-moves.js";
+import { Position, Vertix } from "./data.js";
 
-// Parameters: Start, End: are Positoin (x, y)
-// Returns: Array of all Possible Positions that leads from Start to End
-function possibleMoves(start, end) {
-  // check All Possible Steps then filter them
-  // based on which is gonna make me reach to the End or near it
-  return [];
+// Start is a vertix
+// Returns: Updates children of Start to all possible moves starting from it
+function possibleMoves(start) {
+  let steps = possibleSteps(start.data);
+  let children = makeVerticies(start, steps);
+  start.children = children;
 }
 
 // Parameters:
 // pos: is a position (x, y)
-// Returns: Array of all possible end positions from given position
-function PossibleSteps(pos) {
+// Returns: Array of all possible end positions from given positions
+function possibleSteps(pos) {
   let possibeStepsArray = [];
   let right = stepRight(pos);
   let left = stepLeft(pos);
@@ -42,7 +42,7 @@ function PossibleSteps(pos) {
   }
 
   if (forward) {
-    let endPos1 = twoStepsright(forward);
+    let endPos1 = twoStepsRight(forward);
     let endPos2 = twoStepsLeft(forward);
 
     if (endPos1) {
@@ -54,7 +54,7 @@ function PossibleSteps(pos) {
   }
   if (backward) {
     let endPos1 = twoStepsRight(backward);
-    let endPos2 = twoStepsLeft(forward);
+    let endPos2 = twoStepsLeft(backward);
 
     if (endPos1) {
       possibeStepsArray.push(endPos1);
@@ -137,5 +137,16 @@ function twoStepsBackward(pos) {
   } else {
     return new Position(pos.x, pos.y - 2);
   }
+}
+
+// parent: is a Vertix that is the parent of all given positions,
+// children: all possible positions from that start
+function makeVerticies(parent, children) {
+  let len = children.length;
+  let vertices = [];
+  for (let i = 0; i < len; i++) {
+    vertices[i] = new Vertix(children[i], parent);
+  }
+  return vertices;
 }
 export { possibleMoves };
